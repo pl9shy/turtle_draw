@@ -45,21 +45,22 @@ real_shape = 'square'
 real_color = 'black'
 real_size = 50
 real_background = 'white'
+num_del = 2  # Число-делитель, для ровного и пропорционального построения фигуры.
 
 
 def get_coordinates(x, y):
-    '''
+    """
 Воспроизводит несколько функций.
-    '''
+    """
     get_figures(x, y)
     list_of_colors(x, y)
     get_options(x, y)
 
 
 def get_figures(x, y):
-    '''
+    """
 Определить текущую фигуру.
-    '''
+    """
     global real_shape
     if -250 <= x <= -230 and 330 <= y <= 350:
         real_shape = 'square'
@@ -68,23 +69,23 @@ def get_figures(x, y):
     if -170 <= x <= -150 and 330 <= y <= 350:
         real_shape = 'circle'
     if -130 <= x <= -110 and 330 <= y <= 350:
-        real_shape = 'line'
+        real_shape = 'hexagon'
     if -90 <= x <= -70 and 330 <= y <= 350:
         real_shape = 'star'
 
 
 def list_of_colors(x, y):
-    '''
+    """
 Печатает доступные цвета при нажатии на кнопку "Цвет".
-    '''
+    """
     if -360 <= x <= -320 and 330 <= y <= 350:
         print(f'Список доступных цветов: {sorted(colors_list)}')
 
 
 def get_options(x, y):
-    '''
+    """
 Учитывает параметры для отрисовки фигуры. (цвет, размер, ластик, фон, очистка холста)
-    '''
+    """
     if -360 <= x <= -320 and 330 <= y <= 350:  # Изменяет цвет фигуры.
         global real_color
         r_color = str(s.textinput('Цвет пера', 'Задайте цвет пера: '))
@@ -132,9 +133,9 @@ def get_options(x, y):
 
 
 def blanks(x, y):
-    '''
+    """
 Заготовки для отрисовки фигуры.
-    '''
+    """
     centered_figures(x, y)
     t.color(real_color)
     t.width(int(real_size / 25))
@@ -147,11 +148,10 @@ def blanks(x, y):
 
 
 def centered_figures(x, y):
-    '''
+    """
 Клик мыши принимается за центр фигуры, т.е рисуется не от угла, а от оси.
-    '''
+    """
     global xc, yc
-    num_del = 2  # Число-делитель, для ровного и пропорционального построения фигуры.
     if real_shape == 'square':
         xc = x + real_size / num_del
         yc = y + real_size / num_del
@@ -161,15 +161,18 @@ def centered_figures(x, y):
     if real_shape == 'circle':
         xc = x
         yc = y - real_size / num_del
+    if real_shape == 'hexagon':
+        xc = x - real_size / (num_del * 1.5)
+        yc = y + real_size / num_del
     if real_shape == 'star':
         xc = x - real_size / num_del
         yc = y + real_size / (num_del * 3)
 
 
 def square(x, y):
-    '''
+    """
 Отрисовка квадрата.
-    '''
+    """
     blanks(x, y)
     t.left(90)
     t.begin_fill()
@@ -180,9 +183,9 @@ def square(x, y):
 
 
 def triangle(x, y):
-    '''
+    """
 Отрисовка треугольника.
-    '''
+    """
     blanks(x, y)
     t.begin_fill()
     for _ in range(3):
@@ -192,25 +195,31 @@ def triangle(x, y):
 
 
 def circle(x, y):
-    '''
+    """
 Отрисовка круга.
-    '''
+    """
     blanks(x, y)
     t.begin_fill()
     t.circle(real_size / num_del)
     t.end_fill()
 
 
-def sixangle(x, y):
-    '''
-
-    '''
+def hexagon(x, y):
+    """
+Отрисовка шестиугольника.
+    """
+    blanks(x, y)
+    t.begin_fill()
+    for _ in range(6):
+        t.fd(real_size / num_del * 1.20)
+        t.rt(60)
+    t.end_fill()
 
 
 def star(x, y):
-    '''
+    """
 Отрисовка звезды.
-    '''
+    """
     blanks(x, y)
     t.begin_fill()
     for _ in range(5):
@@ -220,9 +229,9 @@ def star(x, y):
 
 
 def eraser(x, y):
-    '''
+    """
 Отрисовка ластика (точка, цвет которой совпадает с цветом текущего фона.).
-    '''
+    """
     t.up()
     t.goto(x, y)
     t.down()
@@ -230,15 +239,17 @@ def eraser(x, y):
 
 
 def click_draw(x, y):
-    '''
-Вызывает функции, которые в дальнейшем отрисовывают текущую фигуру.
-    '''
+    """
+Вызывает функции, которые в дальнейшем рисуют текущую фигуру.
+    """
     if real_shape == 'square':
         square(x, y)
     if real_shape == 'triangle':
         triangle(x, y)
     if real_shape == 'circle':
         circle(x, y)
+    if real_shape == 'hexagon':
+        hexagon(x, y)
     if real_shape == 'star':
         star(x, y)
     if real_shape == 'eraser':
@@ -246,9 +257,9 @@ def click_draw(x, y):
 
 
 def buttons():
-    '''
+    """
 Отрисовка кнопок, с помощью которых пользователь взаимодействует с программой.
-    '''
+    """
     turtle.tracer(0)
     t.pensize(1)
     t.setheading(0)
