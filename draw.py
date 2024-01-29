@@ -118,6 +118,7 @@ def get_options(x, y):
     if -410 <= x <= -370 and 330 <= y <= 350:  # Изменяет размер фигуры.
         global real_size
         real_size = int(s.textinput('Размер пера', 'Задайте размер пера: '))
+        num_of_real_size()
     if -460 <= x <= -420 and 330 <= y <= 350:  # Изменяет цвет холста.
         global real_background
         r_background = str(s.textinput('Цвет холста', 'Задайте цвет холста: '))
@@ -256,6 +257,37 @@ def click_draw(x, y):
         eraser(x, y)
 
 
+def num_of_real_size():
+    """
+    Отображает текущий размер кисти.
+    """
+    turtle.tracer(0)
+    t.penup()
+    t.setheading(0)
+    t.goto(-410, 355)
+    t.pensize(1)
+    t.pendown()
+    if real_background == 'black':  # Если фон чёрный, контур кнопок - белый.
+        t.pencolor('white')
+    else:  # В других случаях контур кнопок - чёрный.
+        t.pencolor('black')
+    t.pencolor(real_background)
+    t.fillcolor(real_background)
+    t.begin_fill()
+    for i in range(2):
+        t.fd(40)
+        t.left(90)
+        t.fd(25)
+        t.left(90)
+    t.end_fill()
+    t.penup()
+    t.goto(-408, 355)
+    t.pendown()
+    t.pencolor(real_color)
+    t.write(f'Размер:\n {real_size}', font=('Verdana', 7, 'normal'))
+    t.fillcolor(real_background)
+
+
 def buttons():
     """
 Отрисовка кнопок, с помощью которых пользователь взаимодействует с программой.
@@ -312,6 +344,8 @@ def buttons():
     t.penup()
     t.goto(-408, 334)
     t.write('Размер', font=('Verdana', 7, 'normal'))
+
+    num_of_real_size()
 
     t.penup()  # Кнопка "Фон".
     t.goto(-460, 330)
