@@ -266,13 +266,14 @@ def num_of_real_size():
     t.setheading(0)
     t.goto(-410, 355)
     t.pensize(1)
-    t.pendown()
+
     if real_background == 'black':  # Если фон чёрный, контур кнопок - белый.
         t.pencolor('white')
     else:  # В других случаях контур кнопок - чёрный.
         t.pencolor('black')
-    t.pencolor(real_background)
+
     t.fillcolor(real_background)
+    t.pendown()
     t.begin_fill()
     for i in range(2):
         t.fd(40)
@@ -283,7 +284,6 @@ def num_of_real_size():
     t.penup()
     t.goto(-408, 355)
     t.pendown()
-    t.pencolor(real_color)
     t.write(f'Размер:\n {real_size}', font=('Verdana', 7, 'normal'))
     t.fillcolor(real_background)
 
@@ -296,6 +296,7 @@ def buttons():
     t.pensize(1)
     t.setheading(0)
     t.color('black')
+
     t.penup()  # Кнопка "Ластик".
     t.goto(-310, 330)
     t.pendown()
