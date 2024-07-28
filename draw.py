@@ -1,441 +1,173 @@
-import turtle
-
-t = turtle.Turtle(visible=False)
-s = turtle.Screen()
-s.setup(1.0, 1.0)
-
-colors_in_russian = {  # Словарь цветов для использования на русском языке.
-    'красный': 'red',
-    'тёмно-красный': 'dark red',
-    'коралловый': 'Coral',
-    'томатный': 'tomato',
-    'малиновый': 'Crimson',
-    'розовато-коричневый': 'rosy brown',
-    'глубокий розовый': 'deep pink',
-    'фиолетовый': 'Purple',
-    'сиреневый': 'violet',
-    'сливовый': 'Plum',
-    'индиго': 'Indigo',
-    'лавандовый': 'Lavender',
-    'оранжевый': 'orange',
-    'светло-жёлтый': 'light yellow',
-    'золотой': 'gold',
-    'бежевый': 'tan',
-    'коричневый': 'SaddleBrown',
-    'кирпичный': 'Firebrick',
-    'жёлтый': 'yellow',
-    'зелёный': 'green',
-    'тёмно-зелёный': 'sea green',
-    'светло-зелёный': 'light green',
-    'лаймовый': 'Lime',
-    'жёлто-зелёный': 'yellow green',
-    'оливковый': 'OliveDrab',
-    'синий': 'MediumBlue',
-    'тёмно-синий': 'DarkSlateBlue',
-    'голубой': 'sky blue',
-    'белый': 'white',
-    'серый': 'gray',
-    'чёрный': 'black',
-    'розовый': 'pink',
-    'аквамариновый': 'aquamarine',
-}
-
-colors_list = list(colors_in_russian)
-real_shape = 'square'
-real_color = 'black'
-real_size = 50
-real_background = 'white'
-num_del = 2  # Число-делитель, для ровного и пропорционального построения фигуры.
+import tkinter as tk
+import turtle as t
+from tkinter import colorchooser
+from tkinter import ttk
 
 
-def get_coordinates(x, y):
-    """
-Воспроизводит несколько функций.
-    """
-    get_figures(x, y)
-    list_of_colors(x, y)
-    get_options(x, y)
 
+current_size = 50
+current_color = "black"
+current_shape = "Квадрат"
 
-def get_figures(x, y):
-    """
-Определить текущую фигуру.
-    """
-    global real_shape
-    if -250 <= x <= -230 and 330 <= y <= 350:
-        real_shape = 'square'
-    if -210 <= x <= -190 and 330 <= y <= 350:
-        real_shape = 'triangle'
-    if -170 <= x <= -150 and 330 <= y <= 350:
-        real_shape = 'circle'
-    if -130 <= x <= -110 and 330 <= y <= 350:
-        real_shape = 'hexagon'
-    if -90 <= x <= -70 and 330 <= y <= 350:
-        real_shape = 'star'
+def draw_shape(x, y):
+    turtle_pen.penup()
+    turtle_pen.pencolor(current_color)
+    turtle_pen.fillcolor(current_color)
 
+    if current_shape == "Квадрат":
+        centered_square(x,y)
+        turtle_pen.goto(current_x, current_y)
+        turtle_pen.pendown()
+        turtle_pen.begin_fill()
+        
+        for _ in range(4):
+            turtle_pen.right(90)
+            turtle_pen.forward(current_size) 
+        turtle_pen.end_fill()
+            
+    elif current_shape == "Треугольник":
+        centered_triangle(x, y)
+        turtle_pen.goto(current_x, current_y)
+        turtle_pen.pendown()
+        turtle_pen.begin_fill()
+        for _ in range(3):
+            turtle_pen.forward(current_size) 
+            turtle_pen.left(120)
+        turtle_pen.end_fill()
 
-def list_of_colors(x, y):
-    """
-Печатает доступные цвета при нажатии на кнопку "Цвет".
-    """
-    if -360 <= x <= -320 and 330 <= y <= 350:
-        print(f'Список доступных цветов: {sorted(colors_list)}')
+    elif current_shape == "Круг":
+        centered_circle(x, y)
+        turtle_pen.goto(current_x, current_y)
+        turtle_pen.pendown()
+        turtle_pen.begin_fill()
+        turtle_pen.circle(current_size / 2)  
+        turtle_pen.end_fill()
 
+    elif current_shape == "Шестиугольник":
+        centered_hexagon(x, y)
+        turtle_pen.goto(current_x, current_y)
+        turtle_pen.pendown()
+        turtle_pen.begin_fill()
+        for _ in range(6):
+            turtle_pen.forward(current_size / 1.6) 
+            turtle_pen.right(60)
+        turtle_pen.end_fill()
 
-def get_options(x, y):
-    """
-Учитывает параметры для отрисовки фигуры. (цвет, размер, ластик, фон, очистка холста)
-    """
-    if -360 <= x <= -320 and 330 <= y <= 350:  # Изменяет цвет фигуры.
-        global real_color
-        r_color = str(s.textinput('Цвет пера', 'Задайте цвет пера: '))
-        for k, v in colors_in_russian.items():  # Перебирает значения словаря, меняет цвет кнопки.
-            if k == r_color:
-                real_color = v
-                t.pensize(1)
-                t.penup()
-                t.goto(-360, 330)
-                t.setheading(0)
-                t.pendown()
-                if real_color == 'black':
-                    t.pencolor('white')
-                else:
-                    t.pencolor('black')
-                t.fillcolor(real_color)
-                t.begin_fill()
-                for i in range(2):
-                    t.fd(40)
-                    t.left(90)
-                    t.fd(20)
-                    t.left(90)
-                t.end_fill()
-                t.penup()
-                t.goto(-355, 332)
-                t.write('Цвет', font=('Verdana', 10, 'normal'))
-    if -310 <= x <= -270 and 330 <= y <= 350:  # Меняет текущую фигуру на ластик.
-        global real_shape
-        real_shape = 'eraser'
-    if -410 <= x <= -370 and 330 <= y <= 350:  # Изменяет размер фигуры.
-        global real_size
-        real_size = int(s.textinput('Размер пера', 'Задайте размер пера: '))
-        num_of_real_size()
-    if -460 <= x <= -420 and 330 <= y <= 350:  # Изменяет цвет холста.
-        global real_background
-        r_background = str(s.textinput('Цвет холста', 'Задайте цвет холста: '))
-        for k, v in colors_in_russian.items():
-            if k == r_background:
-                real_background = v
-                s.bgcolor(real_background)
-                t.clear()
-                buttons()
-    if -510 <= x <= -470 and 330 <= y <= 350:  # Очистка холста.
-        t.clear()
-        buttons()
+    elif current_shape == "Звезда":
+        centered_star(x, y)
+        turtle_pen.goto(current_x, current_y)
+        turtle_pen.pendown()
+        turtle_pen.begin_fill()
+        for _ in range(5):
+            turtle_pen.forward(current_size)  
+            turtle_pen.right(144)
+        turtle_pen.end_fill()
 
+def centered_square(x, y):
+    global current_x, current_y
+    current_x = x + current_size / 1.5
+    current_y = y + current_size / 2 
 
-def blanks(x, y):
-    """
-Заготовки для отрисовки фигуры.
-    """
-    centered_figures(x, y)
-    t.color(real_color)
-    t.width(int(real_size / 25))
-    t.setheading(0)
-    t.up()
-    t.goto(xc, yc)
-    t.down()
-    t.setheading(0)
-    t.fillcolor(real_color)
+def centered_triangle(x, y):
+    global current_x, current_y
+    current_x = x - current_size / 3
+    current_y = y - current_size / 2
 
+def centered_circle(x, y):
+    global current_x, current_y
+    current_x = x + current_size / 4.5
+    current_y = y - current_size / 2
 
-def centered_figures(x, y):
-    """
-Клик мыши принимается за центр фигуры, т.е рисуется не от угла, а от оси.
-    """
-    global xc, yc
-    if real_shape == 'square':
-        xc = x + real_size / num_del
-        yc = y + real_size / num_del
-    if real_shape == 'triangle':
-        xc = x - real_size / num_del
-        yc = y - real_size / num_del
-    if real_shape == 'circle':
-        xc = x
-        yc = y - real_size / num_del
-    if real_shape == 'hexagon':
-        xc = x - real_size / (num_del * 1.5)
-        yc = y + real_size / num_del
-    if real_shape == 'star':
-        xc = x - real_size / num_del
-        yc = y + real_size / (num_del * 3)
+def centered_hexagon(x, y):
+    global current_x, current_y
+    current_x = x - current_size / 4.5
+    current_y = y + current_size / 2
 
+def centered_star(x, y):
+    global current_x, current_y
+    current_x = x - current_size / 3
+    current_y = y + current_size / 12
 
-def square(x, y):
-    """
-Отрисовка квадрата.
-    """
-    blanks(x, y)
-    t.left(90)
-    t.begin_fill()
-    for _ in range(4):
-        t.left(90)
-        t.fd(real_size)
-    t.end_fill()
+def size_message():
+    global current_size                                                                            # Отображение текущей фигуры
+    message = tk.Label(win, text= f"Текущий размер: {round(current_size)}", bg="white", fg="black", width=25, height=1)
+    #message.pack(side=tk.RIGHT)
+    message.pack(side=tk.TOP)
+    message.after(1700, message.destroy)
 
-
-def triangle(x, y):
-    """
-Отрисовка треугольника.
-    """
-    blanks(x, y)
-    t.begin_fill()
-    for _ in range(3):
-        t.fd(real_size)
-        t.left(120)
-    t.end_fill()
-
-
-def circle(x, y):
-    """
-Отрисовка круга.
-    """
-    blanks(x, y)
-    t.begin_fill()
-    t.circle(real_size / num_del)
-    t.end_fill()
-
-
-def hexagon(x, y):
-    """
-Отрисовка шестиугольника.
-    """
-    blanks(x, y)
-    t.begin_fill()
-    for _ in range(6):
-        t.fd(real_size / num_del * 1.20)
-        t.rt(60)
-    t.end_fill()
-
-
-def star(x, y):
-    """
-Отрисовка звезды.
-    """
-    blanks(x, y)
-    t.begin_fill()
-    for _ in range(5):
-        t.forward(real_size)
-        t.rt(144)
-    t.end_fill()
-
-
-def eraser(x, y):
-    """
-Отрисовка ластика (точка, цвет которой совпадает с цветом текущего фона.).
-    """
-    t.up()
-    t.goto(x, y)
-    t.down()
-    t.dot(real_size * num_del, real_background)
-
-
-def click_draw(x, y):
-    """
-Вызывает функции, которые в дальнейшем рисуют текущую фигуру.
-    """
-    if real_shape == 'square':
-        square(x, y)
-    if real_shape == 'triangle':
-        triangle(x, y)
-    if real_shape == 'circle':
-        circle(x, y)
-    if real_shape == 'hexagon':
-        hexagon(x, y)
-    if real_shape == 'star':
-        star(x, y)
-    if real_shape == 'eraser':
-        eraser(x, y)
-
-
-def num_of_real_size():
-    """
-    Отображает текущий размер кисти.
-    """
-    turtle.tracer(0)
-    t.penup()
-    t.setheading(0)
-    t.goto(-410, 355)
-    t.pensize(1)
-
-    if real_background == 'black':  # Если фон чёрный, контур кнопок - белый.
-        t.pencolor('white')
-    else:  # В других случаях контур кнопок - чёрный.
-        t.pencolor('black')
-
-    t.fillcolor(real_background)
-    t.pendown()
-    t.begin_fill()
-    for i in range(2):
-        t.fd(40)
-        t.left(90)
-        t.fd(25)
-        t.left(90)
-    t.end_fill()
-    t.penup()
-    t.goto(-408, 355)
-    t.pendown()
-    t.write(f'Размер:\n {real_size}', font=('Verdana', 7, 'normal'))
-    t.fillcolor(real_background)
-
-
-def buttons():
-    """
-Отрисовка кнопок, с помощью которых пользователь взаимодействует с программой.
-    """
-    turtle.tracer(0)
-    t.pensize(1)
-    t.setheading(0)
-    t.color('black')
-
-    t.penup()  # Кнопка "Ластик".
-    t.goto(-310, 330)
-    t.pendown()
-    if real_background == 'black':  # Если фон чёрный, контур кнопок - белый.
-        t.pencolor('white')
-    else:  # В других случаях контур кнопок - чёрный.
-        t.pencolor('black')
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(2):
-        t.fd(40)
-        t.left(90)
-        t.fd(20)
-        t.left(90)
-    t.end_fill()
-    t.penup()
-    t.goto(-307, 334)
-    t.write('Ластик', font=('Verdana', 7, 'normal'))
-
-    t.penup()  # Кнопка "Цвет".
-    t.goto(-360, 330)
-    t.pendown()
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(2):
-        t.fd(40)
-        t.left(90)
-        t.fd(20)
-        t.left(90)
-    t.end_fill()
-    t.penup()
-    t.goto(-355, 332)
-    t.write('Цвет', font=('Verdana', 10, 'normal'))
-
-    t.penup()  # Кнопка "Размер".
-    t.goto(-410, 330)
-    t.pendown()
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(2):
-        t.fd(40)
-        t.left(90)
-        t.fd(20)
-        t.left(90)
-    t.end_fill()
-    t.penup()
-    t.goto(-408, 334)
-    t.write('Размер', font=('Verdana', 7, 'normal'))
-
-    num_of_real_size()
-
-    t.penup()  # Кнопка "Фон".
-    t.goto(-460, 330)
-    t.pendown()
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(2):
-        t.fd(40)
-        t.left(90)
-        t.fd(20)
-        t.left(90)
-    t.end_fill()
-    t.penup()
-    t.goto(-453, 332)
-    t.write('Фон', font=('Verdana', 10, 'normal'))
-
-    t.penup()  # Кнопка "Очистить".
-    t.goto(-510, 330)
-    t.pendown()
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(2):
-        t.fd(40)
-        t.left(90)
-        t.fd(20)
-        t.left(90)
-    t.end_fill()
-    t.penup()
-    t.goto(-507, 334)
-    t.write('Очистить', font=('Verdana', 6, 'normal'))
-
-    t.penup()  # Кнопка "Квадрат".
-    t.goto(-250, 330)
-    t.pendown()
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(4):
-        t.fd(20)
-        t.left(90)
-    t.end_fill()
-
-    t.penup()  # Кнопка "Треугольник".
-    t.goto(-210, 330)
-    t.pendown()
-    if real_background == 'black':
-        t.pencolor('white')
+def change_color():
+    global current_color                                                                                       # Изменяет цвет кисти
+    color_code = colorchooser.askcolor(title="Выберите цвет")
+    if color_code[1] == '#000000':
+        t.color = color_code[1]
+        color_button.config(bg=color_code[1], fg="white")
+        current_color = color_code[1]
     else:
-        t.pencolor('black')
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(3):
-        t.fd(20)
-        t.left(120)
-    t.end_fill()
+        t.color = color_code[1]
+        color_button.config(bg=color_code[1], fg="black")
+        current_color = color_code[1]
 
-    t.penup()  # Кнопка "Треугольник".
-    t.goto(-160, 330)
-    t.pendown()
-    t.fillcolor(real_background)
-    t.begin_fill()
-    t.circle(10)
-    t.end_fill()
+def change_background():                                                                                              # Изменяет цвет фона
+    color_code = colorchooser.askcolor(title="Выберите цвет фона")
+    if color_code[1] == '#000000':
+        win.configure(bg=color_code[1])
+        t_screen.bgcolor(color_code[1])
+        for button in buttons:
+            button.config(bg=color_code[1], fg="white")
+    else:
+        win.configure(bg=color_code[1])
+        t_screen.bgcolor(color_code[1])
+        for button in buttons:
+            button.config(bg=color_code[1], fg="black")
 
-    t.penup()  # Кнопка "Шестиугольник".
-    t.goto(-127, 350)
-    t.down()
-    for _ in range(6):
-        t.fd(12)
-        t.rt(60)
+def callback(*arg):
+    global current_shape           
+    current_shape = shape_combobox.get()
 
-    t.penup()  # Кнопка "Звезда".
-    t.goto(-73, 330)
-    t.pendown()
-    t.setheading(144)
-    t.fillcolor(real_background)
-    t.begin_fill()
-    for i in range(5):
-        t.forward(23)
-        t.rt(144)
-    t.end_fill()
-    turtle.tracer(1)
-    t.speed(0)
+def clear_canvas():
+    turtle_pen.clear()
 
+def change_size():
+    global current_size
+    current_size = t_screen.numinput("Введите размер", "Текущий размер:", minval=10, maxval=1000)
+    size_message()
 
-buttons()
+win = tk.Tk()
+win.title('Turtle Draw')
+win.configure(bg = 'white')
+win.geometry("1200x800+350+100")
 
-turtle.listen()
+canvas = t.ScrolledCanvas(win)
+canvas.pack(fill=tk.BOTH, expand=tk.YES)
 
-turtle.onscreenclick(get_coordinates, 1)
-turtle.onscreenclick(click_draw, 3)
+t_screen = t.TurtleScreen(canvas)
 
-s.mainloop()
+turtle_pen = t.RawTurtle(t_screen)
+turtle_pen.speed(0)
+
+t_screen.onclick(draw_shape, 1)
+
+clear_button = tk.Button(text="Очистить", bg = "white", fg= "black", borderwidth=2, width=10, height=1, command=clear_canvas) #Кнопка "Очистить"
+clear_button.pack(anchor = "s")
+ 
+background_button = tk.Button(text="Фон", bg = "white", fg= "black", borderwidth=2 ,command=change_background, width=10, height=1) #Кнопка "Фон"
+background_button.pack(anchor = "s")
+ 
+size_button =tk.Button(text="Размер", bg = "white", fg= "black", borderwidth=2 ,width=10, height=1, command= change_size) #Кнопка "Размер" 
+size_button.pack(anchor = "s")
+
+color_button = tk.Button(text="Цвет", bg = "white", fg= "black", borderwidth=2, command=change_color, width=10, height=1) #Кнопка "Цвет"
+color_button.pack(anchor = "s")
+
+var = tk.StringVar()
+
+shapes = ["Квадрат", "Треугольник", "Круг", "Шестиугольник", "Звезда"]
+shape_combobox = ttk.Combobox(win, values=shapes, textvariable = var)
+shape_combobox.set("Квадрат")
+shape_combobox.pack(side=tk.TOP)
+
+var.trace('w', callback)
+
+buttons = [background_button, clear_button, size_button]
+
+win.mainloop()
